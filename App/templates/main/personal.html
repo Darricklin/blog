@@ -1,0 +1,28 @@
+{% extends 'common/base.html' %}
+{% block title %}
+搜索结果
+{% endblock %}
+{% from 'bootstrap/wtf.html' import quick_form %}
+{% block pagecontent %}
+    {% if data[0] %}
+         {% for posts in data %}
+                <div class="media">
+                    <div class="media-left media-middle">
+                        <a href="#">
+                            <img class="media-object" src="{{ url_for('static',filename='upload/s_'+posts.user.icon) }}"
+                                 width="100" alt="...">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading">{{ posts.title }} <span style="float: right;font-size:14px;">{{ moment(posts.timestamp).fromNow() }}</span></h4>
+                        {{ posts.article|striptags }}
+                    </div>
+                </div>
+         {% endfor %}
+    {% else %}
+             <div class="media">您还没有发表博客</div>
+    {% endif %}
+
+{% from 'common/pagination.html' import page_show %}
+{{ page_show(pagination,'main.personal') }}
+{% endblock %}

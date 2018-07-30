@@ -1,0 +1,83 @@
+{% extends 'common/base.html' %}
+{% block title %}
+首页
+{% endblock %}
+{% from 'bootstrap/wtf.html' import quick_form %}
+{% block pagecontent %}
+    {#轮波图的展示#}
+    {# 圆点与图片的链接 #}
+    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+            <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+        </ol>
+        <!-- Wrapper for slides -->
+          {# 图片与圆点以及左右滑动的连接 #}
+        <div class="carousel-inner" role="listbox" >
+             {# 这个代码块应该出现三个div用来展示三张图片，其中第一个div的class为item active，剩余两个为
+                item才能正确展示，将图片从本地导入，图片名字为'1.jpg','2.jpg','3.jpg',注意拼接时把数字i过滤成字符串#}
+            {% for i in range(1,4) %}
+                <div class="item {% if i==1 %}active{% endif %}" style="height:300px">
+                    <img src="{{ url_for('static',filename='img/banner/'+i|string+'.jpg') }}"  alt="...">
+                    {# 这个div位置在圆点上面，是对当前图片的说明，可以添加文字 #}
+                    <div class="carousel-caption">
+                           <span style="font-size: 20px;color:deeppink">{{ list[i-1]}}</span>
+
+
+                    </div>
+                </div>
+            {% endfor %}
+
+
+
+        </div>
+        {#左右滑动的链接  #}
+        <!-- Controls -->
+        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+
+
+
+    {# 帖子的分页展示 #}
+    {# 拿到所有的帖子data，用循环拿到每一个帖子posts #}
+    {% for posts in data %}
+        <div class="media">{# 展示帖子所有信息的div #}
+            <div class="media-left media-middle">{# 展示头像的div #}
+                <a href="#">{# 给头像添加超链接 #}
+                    <img class="media-object" src="{{ url_for('static',filename='upload/s_'+posts.user.icon) }}"
+                         width="100" alt="...">{# 头像图片，通过本地路径和文件名称获取 #}
+                </a>
+            </div>
+            <div class="media-body">{# 展示文字内容div #}
+                {# 文章的标题获取，将发布时间通过变量传递并摆放在右侧 #}
+                <h4 class="media-heading">{{ posts.title }} <span style="float: right;font-size:14px;">{{ moment(posts.timestamp).fromNow()}}</span></h4>
+                {# 拿到文章的内容，此时展示时会带有<p>标签，通过过滤删除标签 #}
+                {{ posts.article|striptags }}
+            </div>
+        </div>
+    {% endfor %}
+{# 导入宏page_show #}
+{% from 'common/pagination.html' import page_show %}
+    {# 传递参数，实现分页 #}
+{{ page_show(pagination,'main.show') }}
+{#    {%block scripts%}#}
+{#        {{super()}}#}
+{#        <script >#}
+{#            $(function(){#}
+{#                $('#transfer').click(function(){#}
+{#                     var page =$('#transfer_page').val();#}
+{#                    window.location.href="{{url_for('main.show(page)',page=page)}}"#}
+{#                })#}
+{#            })#}
+{#        </script>#}
+{#    {% endblock %}#}
+{% endblock %}

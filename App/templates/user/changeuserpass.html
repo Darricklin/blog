@@ -1,0 +1,10 @@
+{% extends 'common/base.html' %}
+{% block title %}
+修改密码
+{% endblock %}
+{% from 'bootstrap/wtf.html' import quick_form %}
+{% block content %}
+<div class="container">
+{{ quick_form(form) }}
+</div>
+{% endblock %}

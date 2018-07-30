@@ -1,0 +1,19 @@
+{% extends 'common/base.html' %}
+{% block title %}
+修改邮箱
+{% endblock %}
+{% from 'bootstrap/wtf.html' import quick_form %}
+{% block content %}
+<div class="container">
+{{ quick_form(form) }}
+</div>
+{% endblock %}
+{#{% block scripts %}#}
+{#    {{ super() }}#}
+{#    $(document).ready(function(){#}
+{#      $("#send").click(function (){#}
+{#    }#}
+{#    }#}
+{##}
+{##}
+{#{% endblock %}#}

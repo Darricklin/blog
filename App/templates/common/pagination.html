@@ -1,0 +1,37 @@
+{# 设置分页宏，需要给'《 ' ,'》',以及每个页码设定方法 ，采用bootstrap中的分页案例标签#}
+{% macro page_show(pagination,endpoint) %}
+    <nav aria-label="Page navigation">{# 这个区域是分页 #}
+        <ul class="pagination">{# 无序列表，横向排列 #}
+            {# 设定《 , 属于Previous标签,如果没有前一页,《 禁用,如果有前一页,链接对应的地址 #}
+            <li {% if not pagination.has_prev %} class="disabled" {% endif %}>
+                <a {% if pagination.has_prev %} href="{{ url_for(endpoint,page=pagination.prev_num) }}"{% endif %} aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        {# 设置页码与页面的链接 #}
+        {# pagination.iter_pages()是个生成器，返回选中当前页时显示的页数列表，num就代表能在表中展示出来的每一个数字 #}
+        {% for num in pagination.iter_pages(left_edge=2,left_current=2,right_current=5,right_edge=2) %}
+            {# 如果当前页中能显示出num这个页码 #}
+            {% if num %}
+                {# 如果当前页面是1（pagination.page=1）,想让当前页面变成2（pagination.page=2),需要给num2添加超链接 #}
+                {# 链接到端点视图函数的paginate(page,every_page_num,False)分页器,并把页码num赋值给page传递过去,并展示出来。 #}
+                <li {% if pagination.page==num %} class="active"{% endif %}><a href="{{ url_for(endpoint,page=num) }}">{{ num }}</a></li>
+            {% else %}
+
+                <li><a href="#">&hellip;</a></li>
+            {% endif %}
+        {% endfor %}
+        {# 设定 》, 属于Next标签,如果没有后一页,《 禁用,如果有后一页,链接对应的地址 #}
+            <li {% if not pagination.has_next %} class="disabled" {% endif %}>
+                <a {% if pagination.has_next %} href="{{ url_for(endpoint,page=pagination.next_num) }}"{% endif %} aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            <li class="pull-right">
+                <label for="transfer_page">跳转到:</label>
+                <input type="text" class="text-info" size="3" id="transfer_page">
+                <button type="button" class="btn btn-primary btn-sm" id="transfer">Go</button>
+            </li>
+        </ul>
+    </nav>
+{% endmacro %}
