@@ -13,8 +13,9 @@
         {% for num in pagination.iter_pages(left_edge=2,left_current=2,right_current=5,right_edge=2) %}
             {# 如果当前页中能显示出num这个页码 #}
             {% if num %}
-                {# 如果当前页面是1（pagination.page=1）,想让当前页面变成2（pagination.page=2),需要给num2添加超链接 #}
-                {# 链接到端点视图函数的paginate(page,every_page_num,False)分页器,并把页码num赋值给page传递过去,并展示出来。 #}
+                {# 把每一个num链接到端点视图函数的paginate(page,every_page_num,False)分页器,并把页码num赋值给page传递过去,
+                这样点击数字就会进入对应内容的页码 #}
+                {# 如果pagination.page和num一致，给num添加高亮显示样式，以表示当前页数 #}
                 <li {% if pagination.page==num %} class="active"{% endif %}><a href="{{ url_for(endpoint,page=num) }}">{{ num }}</a></li>
             {% else %}
 
